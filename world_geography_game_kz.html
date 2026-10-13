@@ -55,93 +55,91 @@
       position: relative;
     }
 
-    /* Header */
+    /* ========================================================
+       TOP HEADER & NAVIGATION (DESKTOP + RESPONSIVE MOBILE)
+       ======================================================== */
     header {
       background: linear-gradient(180deg, #101a35 0%, #0c142b 100%);
       border-bottom: 1px solid var(--border-color);
-      padding: 6px 14px;
+      padding: 6px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+      z-index: 10;
+      flex-shrink: 0;
+      width: 100%;
+    }
+
+    .header-top-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
-      z-index: 10;
-      flex-shrink: 0;
+      width: 100%;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
     .brand-icon {
-      font-size: 1.4rem;
+      font-size: 1.35rem;
     }
 
     .brand h1 {
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 800;
       background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       line-height: 1.2;
-    }
-
-    .brand p {
-      font-size: 0.68rem;
-      color: var(--text-muted);
-    }
-
-    /* Mode Navigation Tabs */
-    .nav-tabs {
-      display: flex;
-      background: #070d1d;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 2px;
-      gap: 2px;
-    }
-
-    .tab-btn {
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      padding: 5px 10px;
-      border-radius: 6px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      transition: all 0.15s ease;
       white-space: nowrap;
-    }
-
-    .tab-btn.active {
-      background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
-      color: #fff;
-      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.35);
     }
 
     .header-right {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+    }
+
+    .stats-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #070d1d;
+      padding: 3px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      font-size: 0.72rem;
+      white-space: nowrap;
+    }
+
+    .stat-pill {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .stat-value {
+      font-weight: 700;
+      color: var(--accent);
     }
 
     .user-profile-badge {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 4px;
       background: #0c152c;
       border: 1px solid var(--border-color);
-      padding: 4px 8px;
+      padding: 3px 6px;
       border-radius: 6px;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       cursor: pointer;
       white-space: nowrap;
+      max-width: 110px;
     }
 
     .user-profile-badge.admin-badge {
@@ -149,14 +147,21 @@
       background: rgba(168, 85, 247, 0.15);
     }
 
+    .user-name-text {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 700;
+    }
+
     .btn-admin {
       background: linear-gradient(135deg, #9333ea 0%, #6366f1 100%);
       border: 1px solid #c084fc;
       color: #fff;
       font-weight: 700;
-      padding: 4px 10px;
+      padding: 3px 8px;
       border-radius: 6px;
-      font-size: 0.78rem;
+      font-size: 0.72rem;
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -173,78 +178,113 @@
       font-weight: 800;
     }
 
-    .stats-bar {
+    /* Mode Navigation Tabs: 100% width on mobile so they never overflow */
+    .nav-tabs {
       display: flex;
-      align-items: center;
-      gap: 8px;
       background: #070d1d;
-      padding: 4px 8px;
-      border-radius: 8px;
       border: 1px solid var(--border-color);
-      font-size: 0.75rem;
-      white-space: nowrap;
+      border-radius: 8px;
+      padding: 2px;
+      gap: 2px;
+      width: 100%;
     }
 
-    .stat-pill {
+    .tab-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 6px 4px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.35);
+    }
+
+    /* ========================================================
+       CONTROLS BAR (TWO CLEAN ROWS ON MOBILE, NO HORIZONTAL OVERFLOW)
+       ======================================================== */
+    .controls-bar {
+      background: #0a1228;
+      border-bottom: 1px solid var(--border-color);
+      padding: 4px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.75rem;
+      flex-shrink: 0;
+      width: 100%;
+    }
+
+    .ctrl-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      width: 100%;
+    }
+
+    .ctrl-item {
+      flex: 1;
+      min-width: 0;
       display: flex;
       align-items: center;
       gap: 3px;
     }
 
-    .stat-value {
-      font-weight: 700;
-      color: var(--accent);
-    }
-
-    /* Controls Bar */
-    .controls-bar {
-      background: #0a1228;
-      border-bottom: 1px solid var(--border-color);
-      padding: 5px 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      font-size: 0.78rem;
-      flex-shrink: 0;
-    }
-
-    .ctrl-group {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-
-    .ctrl-group label {
+    .ctrl-item label {
       color: var(--text-muted);
-      font-weight: 500;
+      font-size: 0.68rem;
+      white-space: nowrap;
     }
 
-    select, input[type="text"], input[type="password"], input[type="email"] {
+    .ctrl-item select, .ctrl-item input {
+      flex: 1;
+      min-width: 0;
+      width: 100%;
       background: #131e3d;
       border: 1px solid var(--border-color);
       color: var(--text-main);
-      padding: 4px 8px;
+      padding: 4px 6px;
       border-radius: 5px;
-      font-size: 0.78rem;
+      font-size: 0.72rem;
       outline: none;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .btn {
       background: var(--bg-card);
       border: 1px solid var(--border-color);
       color: var(--text-main);
-      padding: 4px 10px;
+      padding: 4px 8px;
       border-radius: 5px;
-      font-size: 0.78rem;
+      font-size: 0.72rem;
       font-weight: 600;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      justify-content: center;
+      gap: 3px;
       transition: all 0.15s;
       white-space: nowrap;
+    }
+
+    .btn-flex {
+      flex: 1;
+      min-width: 0;
     }
 
     .btn:hover {
@@ -265,102 +305,137 @@
     }
 
     .btn-icon {
-      padding: 4px 6px;
+      padding: 3px 6px;
     }
 
-    /* Task Banner */
+    /* ========================================================
+       TASK BANNER (COMPACT & NEVER CUT OFF ON MOBILE)
+       ======================================================== */
     .task-banner {
       background: linear-gradient(90deg, #0f1938 0%, #15244e 100%);
       border-bottom: 1px solid var(--border-color);
-      padding: 8px 14px;
+      padding: 6px 10px;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      min-height: 50px;
+      flex-direction: column;
+      gap: 4px;
+      min-height: 48px;
       flex-shrink: 0;
+      width: 100%;
     }
 
-    .task-info {
+    .task-content {
+      width: 100%;
+    }
+
+    .task-main-row {
       display: flex;
       align-items: center;
-      gap: 10px;
-      flex: 1;
+      gap: 6px;
+      width: 100%;
+      flex-wrap: wrap;
     }
 
     .task-badge {
       background: #080f24;
       border: 1px solid var(--border-color);
-      border-radius: 6px;
-      padding: 4px 8px;
-      font-size: 0.75rem;
+      border-radius: 5px;
+      padding: 2px 6px;
+      font-size: 0.7rem;
       font-weight: 700;
       color: var(--accent);
       white-space: nowrap;
     }
 
-    .task-title-wrap h2 {
-      font-size: 0.95rem;
+    .task-prompt-text {
+      font-size: 0.82rem;
       font-weight: 700;
       color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      white-space: nowrap;
     }
 
     .target-country-name {
       color: #38bdf8;
-      font-size: 1.15rem;
+      font-size: 1.05rem;
       font-weight: 800;
       text-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
+      white-space: nowrap;
+    }
+
+    .target-country-flag {
+      font-size: 1.2rem;
+    }
+
+    .word-blanks {
+      font-family: monospace;
+      font-size: 0.82rem;
+      letter-spacing: 1px;
+      color: var(--warning);
+      font-weight: 700;
+      white-space: nowrap;
     }
 
     .typing-box {
       display: flex;
       align-items: center;
-      gap: 6px;
-      flex: 1;
-      max-width: 400px;
+      gap: 4px;
+      width: 100%;
+      margin-top: 3px;
     }
 
     .typing-box input {
       flex: 1;
-      padding: 6px 10px;
-      font-size: 0.9rem;
-      border-radius: 6px;
+      min-width: 0;
+      background: #131e3d;
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 5px 8px;
+      font-size: 0.88rem;
+      border-radius: 5px;
+      outline: none;
       user-select: text;
       -webkit-user-select: text;
     }
 
-    .word-blanks {
-      font-family: monospace;
-      font-size: 0.88rem;
-      letter-spacing: 2px;
-      color: var(--warning);
-      font-weight: 700;
-      margin-left: 6px;
+    .btn-submit-answer {
+      padding: 5px 12px;
+      font-size: 0.95rem;
+      font-weight: 800;
     }
 
-    .task-actions {
+    .task-actions-row {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
+      width: 100%;
+      margin-top: 2px;
+    }
+
+    .btn-action {
+      flex: 1;
+      padding: 4px 2px;
+      font-size: 0.7rem;
+      text-align: center;
+      justify-content: center;
+      min-width: 0;
     }
 
     .hint-alert {
       background: rgba(245, 158, 11, 0.15);
       border: 1px solid var(--warning);
       color: #fef3c7;
-      padding: 4px 10px;
-      border-radius: 6px;
-      font-size: 0.75rem;
+      padding: 3px 8px;
+      border-radius: 5px;
+      font-size: 0.72rem;
       display: none;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
+      margin-top: 2px;
       animation: fadeIn 0.2s ease;
     }
 
-    /* Map Workspace: GPU Composited, Zero Forced Reflows, Hardware Accelerated */
+    /* ========================================================
+       MAP CANVAS: HARDWARE ACCELERATED & ANCHORED PINCH
+       ======================================================== */
     .map-wrapper {
       flex: 1;
       position: relative;
@@ -372,15 +447,16 @@
       cursor: grab;
       touch-action: none;
       -webkit-touch-callout: none;
-      transform: translateZ(0); /* Promotes layer to mobile GPU */
+      transform: translateZ(0);
       will-change: transform;
+      width: 100%;
+      height: 100%;
     }
 
     .map-wrapper.is-dragging {
       cursor: grabbing;
     }
 
-    /* During active gestures, disable country pointer events to eliminate hover recalculation */
     .map-wrapper.is-dragging .country {
       pointer-events: none;
     }
@@ -392,7 +468,6 @@
       touch-action: none;
     }
 
-    /* Country Styles: 100% vector stroke, ZERO expensive SVG drop-shadow filters */
     .country {
       stroke: #192440;
       stroke-width: 0.75;
@@ -465,47 +540,47 @@
       stroke-width: 1.8 !important;
     }
 
-    /* Map Controls (Floating) */
+    /* Floating Zoom Controls: comfortable thumb size */
     .map-floating-controls {
       position: absolute;
-      bottom: 16px;
-      right: 16px;
+      bottom: 14px;
+      right: 14px;
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 5px;
       background: rgba(11, 19, 41, 0.85);
       backdrop-filter: blur(8px);
-      padding: 5px;
+      padding: 4px;
       border-radius: 8px;
       border: 1px solid var(--border-color);
       z-index: 5;
     }
 
     .map-floating-controls .btn-icon {
-      width: 38px;
-      height: 38px;
+      width: 36px;
+      height: 36px;
       display: flex;
       align-items: center;
       justify-content: center;
       border-radius: 6px;
       padding: 0;
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 800;
     }
 
     .map-legend {
       position: absolute;
-      bottom: 14px;
-      left: 14px;
+      bottom: 12px;
+      left: 12px;
       background: rgba(11, 19, 41, 0.85);
       backdrop-filter: blur(8px);
-      padding: 5px 10px;
+      padding: 4px 8px;
       border-radius: 6px;
       border: 1px solid var(--border-color);
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: 6px;
       z-index: 5;
       pointer-events: none;
     }
@@ -528,9 +603,9 @@
       background: rgba(15, 23, 42, 0.95);
       backdrop-filter: blur(8px);
       border: 1px solid var(--accent);
-      padding: 6px 10px;
+      padding: 5px 8px;
       border-radius: 6px;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       pointer-events: none;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
       z-index: 20;
@@ -543,24 +618,24 @@
       color: #fff;
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
     }
 
     #map-tooltip .tt-detail {
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       color: var(--text-muted);
     }
 
     .explore-panel {
       position: absolute;
-      top: 14px;
-      left: 14px;
-      width: 280px;
+      top: 12px;
+      left: 12px;
+      width: 260px;
       background: rgba(15, 23, 42, 0.95);
       backdrop-filter: blur(10px);
       border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 12px;
+      border-radius: 8px;
+      padding: 10px;
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
       display: none;
       z-index: 10;
@@ -575,25 +650,25 @@
       align-items: center;
       justify-content: space-between;
       border-bottom: 1px solid var(--border-color);
-      padding-bottom: 6px;
-      margin-bottom: 8px;
+      padding-bottom: 4px;
+      margin-bottom: 6px;
     }
 
     .exp-title {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
 
     .exp-flag {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
     }
 
     .exp-row {
       display: flex;
       justify-content: space-between;
-      padding: 4px 0;
-      font-size: 0.78rem;
+      padding: 3px 0;
+      font-size: 0.75rem;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
@@ -619,7 +694,7 @@
       align-items: center;
       justify-content: center;
       z-index: 100;
-      padding: 14px;
+      padding: 12px;
       animation: fadeIn 0.2s ease;
     }
 
@@ -630,12 +705,12 @@
     .modal-card {
       background: #0f172a;
       border: 1px solid var(--border-color);
-      border-radius: 14px;
+      border-radius: 12px;
       width: 100%;
-      max-width: 600px;
+      max-width: 580px;
       max-height: 90vh;
       overflow-y: auto;
-      padding: 20px;
+      padding: 16px;
       text-align: center;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
     }
@@ -646,27 +721,27 @@
     }
 
     .modal-card-auth {
-      max-width: 420px;
+      max-width: 400px;
       text-align: left;
     }
 
     .form-group {
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       text-align: left;
     }
 
     .form-group label {
       display: block;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       font-weight: 600;
       color: var(--text-muted);
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
 
     .form-group input, .form-group select {
       width: 100%;
-      padding: 8px 10px;
-      font-size: 0.88rem;
+      padding: 7px 10px;
+      font-size: 0.85rem;
       border-radius: 6px;
       user-select: text;
       -webkit-user-select: text;
@@ -676,63 +751,62 @@
       background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(99, 102, 241, 0.2) 100%);
       border: 1px solid #c084fc;
       border-radius: 6px;
-      padding: 8px 10px;
-      margin-bottom: 12px;
+      padding: 6px 10px;
+      margin-bottom: 10px;
       display: none;
     }
 
     .admin-auto-banner strong {
       color: #f3e8ff;
-      font-size: 0.82rem;
+      font-size: 0.8rem;
     }
 
     .admin-auto-banner p {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       color: #d8b4fe;
       margin-top: 2px;
     }
 
-    /* Results stats */
     .modal-trophy {
-      font-size: 2.6rem;
+      font-size: 2.4rem;
       margin-bottom: 4px;
     }
 
     .modal-title {
-      font-size: 1.35rem;
+      font-size: 1.25rem;
       font-weight: 800;
       color: #fff;
     }
 
     .modal-subtitle {
       color: var(--text-muted);
-      font-size: 0.82rem;
-      margin-bottom: 14px;
+      font-size: 0.8rem;
+      margin-bottom: 12px;
     }
 
     .modal-stats {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      margin-bottom: 14px;
+      gap: 6px;
+      margin-bottom: 12px;
     }
 
     .m-stat {
       background: #1e293b;
-      padding: 8px 4px;
-      border-radius: 8px;
+      padding: 6px 3px;
+      border-radius: 6px;
       border: 1px solid var(--border-color);
       text-align: center;
     }
 
     .m-stat-val {
-      font-size: 1.15rem;
+      font-size: 1.05rem;
       font-weight: 800;
       color: var(--accent);
     }
 
     .m-stat-label {
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       color: var(--text-muted);
       margin-top: 2px;
     }
@@ -740,17 +814,17 @@
     .analysis-container {
       background: #090f20;
       border: 1px solid var(--border-color);
-      border-radius: 10px;
-      padding: 12px;
-      margin-bottom: 14px;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 12px;
       text-align: left;
     }
 
     .analysis-header {
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       font-weight: 700;
       color: #fff;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -759,36 +833,36 @@
     .analysis-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-bottom: 10px;
+      gap: 6px;
+      margin-bottom: 8px;
     }
 
     .analysis-card {
       background: #111a33;
       border: 1px solid var(--border-color);
       border-radius: 6px;
-      padding: 8px;
+      padding: 6px;
     }
 
     .analysis-card-title {
-      font-size: 0.72rem;
+      font-size: 0.68rem;
       color: var(--text-muted);
       font-weight: 600;
     }
 
     .analysis-card-val {
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 800;
       color: #fff;
     }
 
     .analysis-card-desc {
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       color: var(--text-muted);
     }
 
     .continents-breakdown {
-      margin-top: 6px;
+      margin-top: 4px;
     }
 
     .cont-row {
@@ -797,11 +871,11 @@
       justify-content: space-between;
       gap: 6px;
       padding: 2px 0;
-      font-size: 0.75rem;
+      font-size: 0.72rem;
     }
 
     .cont-name {
-      width: 125px;
+      width: 115px;
       color: #fff;
     }
 
@@ -820,7 +894,7 @@
     }
 
     .cont-percent {
-      width: 40px;
+      width: 35px;
       text-align: right;
       font-weight: 700;
       color: var(--accent);
@@ -829,16 +903,16 @@
     .submission-box {
       background: #111b38;
       border: 1px solid #38bdf8;
-      border-radius: 8px;
-      padding: 10px;
-      margin-bottom: 14px;
+      border-radius: 6px;
+      padding: 8px;
+      margin-bottom: 12px;
       text-align: left;
     }
 
     .submission-box h3 {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       color: #38bdf8;
-      margin-bottom: 4px;
+      margin-bottom: 3px;
     }
 
     .code-pill {
@@ -846,38 +920,38 @@
       background: #090f20;
       border: 1px dashed #38bdf8;
       color: #fef08a;
-      padding: 5px 8px;
-      border-radius: 5px;
-      font-size: 0.75rem;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 0.72rem;
       word-break: break-all;
-      margin: 6px 0;
+      margin: 4px 0;
       user-select: all;
       -webkit-user-select: all;
     }
 
     .review-list {
-      max-height: 120px;
+      max-height: 110px;
       overflow-y: auto;
       text-align: left;
       background: #090f20;
       border: 1px solid var(--border-color);
       border-radius: 6px;
-      padding: 6px 8px;
-      margin-bottom: 14px;
-      font-size: 0.75rem;
+      padding: 4px 6px;
+      margin-bottom: 12px;
+      font-size: 0.72rem;
     }
 
     .review-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 4px 0;
+      padding: 3px 0;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
     .modal-actions {
       display: flex;
-      gap: 6px;
+      gap: 5px;
       justify-content: center;
       flex-wrap: wrap;
     }
@@ -888,38 +962,38 @@
       align-items: center;
       justify-content: space-between;
       border-bottom: 1px solid var(--border-color);
-      padding-bottom: 10px;
-      margin-bottom: 14px;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
     }
 
     .admin-title-wrap h2 {
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       color: #fff;
     }
 
     .admin-kpi-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-      margin-bottom: 14px;
+      gap: 6px;
+      margin-bottom: 12px;
     }
 
     .kpi-card {
       background: #111a33;
       border: 1px solid var(--border-color);
       border-radius: 6px;
-      padding: 8px;
+      padding: 6px;
       text-align: center;
     }
 
     .kpi-num {
-      font-size: 1.25rem;
+      font-size: 1.15rem;
       font-weight: 800;
       color: #a855f7;
     }
 
     .kpi-label {
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       color: var(--text-muted);
     }
 
@@ -927,34 +1001,34 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
       background: #090f20;
-      padding: 6px 10px;
+      padding: 5px 8px;
       border-radius: 6px;
       border: 1px solid var(--border-color);
     }
 
     .table-responsive {
-      max-height: 350px;
+      max-height: 320px;
       overflow-y: auto;
       border: 1px solid var(--border-color);
       border-radius: 6px;
       background: #090f20;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
     }
 
     table.admin-table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       text-align: left;
     }
 
     table.admin-table th {
       background: #111a33;
-      padding: 6px 8px;
+      padding: 5px 6px;
       font-weight: 700;
       color: var(--text-muted);
       border-bottom: 1px solid var(--border-color);
@@ -964,17 +1038,17 @@
     }
 
     table.admin-table td {
-      padding: 6px 8px;
+      padding: 5px 6px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       color: #fff;
     }
 
     .badge-grade {
       display: inline-block;
-      padding: 1px 6px;
+      padding: 1px 5px;
       border-radius: 4px;
       font-weight: 800;
-      font-size: 0.72rem;
+      font-size: 0.7rem;
     }
 
     .grade-5 { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; }
@@ -992,138 +1066,13 @@
       z-index: 101;
     }
 
-    /* ========================================================
-       MOBILE-FIRST RESPONSIVE OPTIMIZATIONS (<768px)
-       ======================================================== */
-    @media (max-width: 768px) {
-      header {
-        padding: 5px 8px;
-        gap: 6px;
-      }
-      .brand-icon {
-        font-size: 1.3rem;
-      }
-      .brand h1 {
-        font-size: 0.88rem;
-      }
-      .brand p {
-        display: none !important;
-      }
-      .nav-tabs {
-        padding: 2px;
-        gap: 1px;
-      }
-      .tab-btn {
-        padding: 4px 6px;
-        font-size: 0.72rem;
-        gap: 2px;
-      }
-      .header-right {
-        gap: 4px;
-      }
-      .user-profile-badge {
-        padding: 3px 6px;
-        font-size: 0.7rem;
-      }
-      .stats-bar {
-        padding: 3px 6px;
-        gap: 6px;
-        font-size: 0.7rem;
-      }
-      .btn-admin {
-        padding: 4px 8px;
-        font-size: 0.72rem;
-      }
-
-      /* Compact scrollable controls bar on mobile */
-      .controls-bar {
-        padding: 4px 8px;
-        gap: 6px;
-        overflow-x: auto;
-        white-space: nowrap;
-        -webkit-overflow-scrolling: touch;
-      }
-      .controls-bar::-webkit-scrollbar {
-        display: none;
-      }
-      .ctrl-group {
-        flex-wrap: nowrap;
-        gap: 4px;
-      }
-      .ctrl-group label {
-        font-size: 0.68rem;
-      }
-      select, input[type="text"], input[type="password"], input[type="email"] {
-        padding: 3px 5px;
-        font-size: 0.72rem;
-      }
-      .btn {
-        padding: 4px 7px;
-        font-size: 0.72rem;
-      }
-
-      /* Compact task banner on mobile */
-      .task-banner {
-        padding: 5px 8px;
-        min-height: 44px;
-        gap: 6px;
-      }
-      .task-info {
-        gap: 6px;
-      }
-      .task-badge {
-        padding: 2px 5px;
-        font-size: 0.68rem;
-      }
-      .task-title-wrap h2 {
-        font-size: 0.82rem;
-      }
-      .target-country-name {
-        font-size: 0.95rem;
-      }
-      .typing-box {
-        max-width: 100%;
-        gap: 4px;
-      }
-      .typing-box input {
-        padding: 4px 6px;
-        font-size: 0.8rem;
-      }
-      .task-actions {
-        gap: 3px;
-      }
-      .task-actions .btn {
-        padding: 3px 6px;
-        font-size: 0.68rem;
-      }
-
-      /* Mobile map controls */
-      .map-floating-controls {
-        bottom: 10px;
-        right: 10px;
-        gap: 4px;
-        padding: 4px;
-      }
-      .map-floating-controls .btn-icon {
-        width: 36px;
-        height: 36px;
-        font-size: 1.1rem;
-      }
+    /* Mobile overrides for screens <= 600px */
+    @media (max-width: 600px) {
       .map-legend {
         display: none !important;
       }
-
-      /* Mobile modals */
-      .modal-card {
-        padding: 14px;
-        border-radius: 10px;
-      }
       .modal-stats {
         grid-template-columns: repeat(2, 1fr);
-        gap: 6px;
-      }
-      .analysis-grid {
-        grid-template-columns: 1fr;
       }
       .admin-kpi-row {
         grid-template-columns: repeat(2, 1fr);
@@ -1135,16 +1084,38 @@
   <div id="app-root">
     <canvas id="confetti-canvas"></canvas>
 
-    <!-- Header -->
+    <!-- Top Header -->
     <header>
-      <div class="brand">
-        <div class="brand-icon">🌍</div>
-        <div>
+      <div class="header-top-row">
+        <div class="brand">
+          <div class="brand-icon">🌍</div>
           <h1>ГеоКвест</h1>
-          <p>Интерактивті карта • Мұғалім журналы</p>
+        </div>
+
+        <div class="header-right">
+          <!-- Compact Stats Bar -->
+          <div class="stats-bar">
+            <div class="stat-pill"><span>🏆</span><span class="stat-value" id="score-display">0</span></div>
+            <div class="stat-pill"><span>🔥</span><span class="stat-value" id="streak-display">0</span></div>
+            <div class="stat-pill"><span>⏱️</span><span class="stat-value" id="timer-display">00:00</span></div>
+          </div>
+
+          <!-- User Badge -->
+          <div class="user-profile-badge" id="user-badge" onclick="onUserBadgeClick()" title="Профиль">
+            <span id="user-role-icon">👤</span>
+            <span id="user-display-name" class="user-name-text">Қонақ</span>
+            <button class="btn btn-icon" onclick="event.stopPropagation(); logoutUser();" title="Шығу / Выход" style="padding: 1px 3px; margin-left: 2px; font-size: 0.65rem;">↩</button>
+          </div>
+
+          <!-- Admin Button -->
+          <button class="btn-admin" id="btn-admin-header" onclick="openAdminPanel()">
+            👑 <span>Мұғалім</span>
+            <span class="admin-badge-count" id="admin-badge-count">0</span>
+          </button>
         </div>
       </div>
 
+      <!-- Mode Navigation Tabs: 100% full width -->
       <div class="nav-tabs">
         <button class="tab-btn active" id="tab-find" onclick="setMode('find')">
           🎯 <span>Картадан тап</span>
@@ -1156,128 +1127,89 @@
           🔍 <span>Атлас</span>
         </button>
       </div>
-
-      <div class="header-right">
-        <div class="user-profile-badge" id="user-badge" onclick="onUserBadgeClick()" title="Профиль">
-          <span id="user-role-icon">👤</span>
-          <div>
-            <div id="user-display-name" style="font-weight: 700; color: #fff;">Қонақ</div>
-            <div id="user-display-sub" style="font-size: 0.65rem; color: var(--text-muted);">Тіркелу</div>
-          </div>
-          <button class="btn btn-icon" onclick="event.stopPropagation(); logoutUser();" title="Шығу / Выход" style="padding: 1px 4px; margin-left: 3px; font-size: 0.7rem;">↩</button>
-        </div>
-
-        <div class="stats-bar">
-          <div class="stat-pill">
-            <span>🏆 Ұпай:</span>
-            <span class="stat-value" id="score-display">0</span>
-          </div>
-          <div class="stat-pill">
-            <span>🔥 Серия:</span>
-            <span class="stat-value" id="streak-display">0</span>
-          </div>
-          <div class="stat-pill">
-            <span>📊 Дәлдік:</span>
-            <span class="stat-value" id="acc-display">100%</span>
-          </div>
-          <div class="stat-pill">
-            <span>⏱️</span>
-            <span class="stat-value" id="timer-display">00:00</span>
-          </div>
-        </div>
-
-        <button class="btn-admin" id="btn-admin-header" onclick="openAdminPanel()">
-          👑 <span>Мұғалім журналы</span>
-          <span class="admin-badge-count" id="admin-badge-count">0</span>
-        </button>
-      </div>
     </header>
 
-    <!-- Controls Bar -->
+    <!-- Controls Bar: 2 compact rows, 100% width, never clipped! -->
     <div class="controls-bar">
-      <div class="ctrl-group">
-        <label for="continent-select">Аймақ:</label>
-        <select id="continent-select" onchange="onFilterChange()">
-          <option value="all">🌍 Бүкіл әлем (175)</option>
-          <option value="Еуропа" selected>🇪🇺 Еуропа (43)</option>
-          <option value="Азия">🇦🇸 Азия (47)</option>
-          <option value="Африка">🌍 Африка (52)</option>
-          <option value="Солтүстік Америка" >🌎 Солт. Америка (15)</option>
-          <option value="Оңтүстік Америка">🌎 Оңт. Америка (13)</option>
-          <option value="Океания">🌏 Океания (5)</option>
-        </select>
-
-        <label for="count-select">Сұрақ:</label>
-        <select id="count-select" onchange="onFilterChange()">
-          <option value="10">10 сұрақ</option>
-          <option value="15">15 сұрақ</option>
-          <option value="25">25 сұрақ</option>
-          <option value="all">Барлығы</option>
-        </select>
-
-        <label for="quiz-mode-select">Режим:</label>
-        <select id="quiz-mode-select" onchange="onQuizModeChange()">
-          <option value="training">🎓 Жаттығу</option>
-          <option value="exam">⚡ Сынақ / Емтихан</option>
-        </select>
-
-        <button class="btn" id="palette-btn" onclick="togglePalette()">🎨 Түстер: Аймақ</button>
+      <!-- Row 1: Region + Count + Format Selects -->
+      <div class="ctrl-row">
+        <div class="ctrl-item" style="flex: 1.4;">
+          <select id="continent-select" onchange="onFilterChange()">
+            <option value="all">🌍 Бүкіл әлем (175)</option>
+            <option value="Еуропа" selected>🇪🇺 Еуропа (43)</option>
+            <option value="Азия">🇦🇸 Азия (47)</option>
+            <option value="Африка">🌍 Африка (52)</option>
+            <option value="Солтүстік Америка">🌎 Солт. Америка (15)</option>
+            <option value="Оңтүстік Америка">🌎 Оңт. Америка (13)</option>
+            <option value="Океания">🌏 Океания (5)</option>
+          </select>
+        </div>
+        <div class="ctrl-item" style="flex: 0.9;">
+          <select id="count-select" onchange="onFilterChange()">
+            <option value="10">10 сұрақ</option>
+            <option value="15">15 сұрақ</option>
+            <option value="25">25 сұрақ</option>
+            <option value="all">Барлығы</option>
+          </select>
+        </div>
+        <div class="ctrl-item" style="flex: 1.1;">
+          <select id="quiz-mode-select" onchange="onQuizModeChange()">
+            <option value="training">🎓 Жаттығу</option>
+            <option value="exam">⚡ Емтихан</option>
+          </select>
+        </div>
       </div>
 
-      <div class="ctrl-group">
-        <button class="btn btn-analytics" onclick="showLiveAnalysis()">📊 Талдау</button>
-        <button class="btn" id="sound-btn" onclick="toggleSound()">🔊 Дыбыс</button>
-        <button class="btn btn-primary" onclick="restartRound()">🔄 Қайта бастау</button>
+      <!-- Row 2: Four quick buttons taking equal width -->
+      <div class="ctrl-row">
+        <button class="btn btn-flex" id="palette-btn" onclick="togglePalette()">🎨 Түстер</button>
+        <button class="btn btn-flex btn-analytics" onclick="showLiveAnalysis()">📊 Талдау</button>
+        <button class="btn btn-flex" id="sound-btn" onclick="toggleSound()">🔊 Дыбыс</button>
+        <button class="btn btn-flex btn-primary" onclick="restartRound()">🔄 Заново</button>
       </div>
     </div>
 
-    <!-- Task Banner -->
+    <!-- Task Banner: Question + Input + 4 Actions evenly fitted -->
     <div class="task-banner">
-      <div id="banner-find" class="task-info">
-        <div class="task-badge">
-          <span id="question-progress">1 / 10</span>
-        </div>
-        <div class="task-title-wrap">
-          <h2>
-            <span>Елді табыңыз:</span>
-            <span class="target-country-name" id="find-target-name">Франция</span>
-            <span id="find-target-flag">🇫🇷</span>
-          </h2>
+      <!-- Mode 1: Find -->
+      <div id="banner-find" class="task-content">
+        <div class="task-main-row">
+          <span class="task-badge" id="question-progress">1 / 10</span>
+          <span class="task-prompt-text">Елді табыңыз:</span>
+          <span class="target-country-name" id="find-target-name">Франция</span>
+          <span class="target-country-flag" id="find-target-flag">🇫🇷</span>
         </div>
         <div class="hint-alert" id="find-hint-box"></div>
       </div>
 
-      <div id="banner-type" class="task-info" style="display: none;">
-        <div class="task-badge">
-          <span id="type-question-progress">1 / 10</span>
-        </div>
-        <div class="task-title-wrap">
-          <h2>
-            <span>Бұл қай ел?</span>
-            <span class="word-blanks" id="word-blanks-display"></span>
-          </h2>
+      <!-- Mode 2: Type -->
+      <div id="banner-type" class="task-content" style="display: none;">
+        <div class="task-main-row">
+          <span class="task-badge" id="type-question-progress">1 / 10</span>
+          <span class="task-prompt-text">Бұл қай ел?</span>
+          <span class="word-blanks" id="word-blanks-display"></span>
         </div>
         <form class="typing-box" onsubmit="event.preventDefault(); submitAnswer();">
           <input type="text" id="type-input" placeholder="Ел атауы..." autocomplete="off">
-          <button type="submit" class="btn btn-primary">Тексеру ↵</button>
+          <button type="submit" class="btn btn-primary btn-submit-answer">↵</button>
         </form>
         <div class="hint-alert" id="type-hint-box"></div>
       </div>
 
-      <div id="banner-explore" class="task-info" style="display: none;">
-        <div class="task-title-wrap">
-          <h2>🔍 Атлас және картаны зерттеу</h2>
-        </div>
-        <div style="margin-left: auto;">
-          <input type="text" id="explore-search" placeholder="Елді іздеу..." oninput="onSearchCountry(this.value)" style="width: 170px;">
+      <!-- Mode 3: Explore -->
+      <div id="banner-explore" class="task-content" style="display: none;">
+        <div class="task-main-row" style="justify-content: space-between;">
+          <span class="task-prompt-text">🔍 Атлас режимі</span>
+          <input type="text" id="explore-search" placeholder="Іздеу..." oninput="onSearchCountry(this.value)" style="width: 140px; padding: 3px 6px; font-size: 0.75rem; background: #131e3d; border: 1px solid var(--border-color); color: #fff; border-radius: 4px;">
         </div>
       </div>
 
-      <div class="task-actions" id="game-actions">
-        <button class="btn" id="btn-zoom-target" onclick="zoomToTarget()" title="Нысанаға / К цели">🎯 Нысанаға</button>
-        <button class="btn" id="btn-hint" onclick="giveHint()">💡 Көмек</button>
-        <button class="btn" id="btn-reveal" onclick="revealAnswer()">👀 Жауап</button>
-        <button class="btn" id="btn-skip" onclick="skipQuestion()">⏭️ Өткізу</button>
+      <!-- Action Buttons: 4 buttons taking equal width, perfectly fitted! -->
+      <div class="task-actions-row" id="game-actions">
+        <button class="btn btn-action" id="btn-zoom-target" onclick="zoomToTarget()" title="Нысана / Цель">🎯 Нысана</button>
+        <button class="btn btn-action" id="btn-hint" onclick="giveHint()">💡 Көмек</button>
+        <button class="btn btn-action" id="btn-reveal" onclick="revealAnswer()">👀 Жауап</button>
+        <button class="btn btn-action" id="btn-skip" onclick="skipQuestion()">⏭️ Өткізу</button>
       </div>
     </div>
 
@@ -1310,7 +1242,6 @@
         <div class="tt-detail" id="tt-detail"></div>
       </div>
 
-      <!-- Floating Controls: Larger on mobile for finger tapping -->
       <div class="map-floating-controls">
         <button class="btn btn-icon" onclick="zoomIn()" title="Жақындату / Приблизить (+)">+</button>
         <button class="btn btn-icon" onclick="zoomOut()" title="Алыстату / Отдалить (−)">−</button>
@@ -1332,11 +1263,11 @@
           <div class="exp-title">
             <span class="exp-flag" id="exp-flag">🇰🇿</span>
             <div>
-              <div id="exp-name" style="font-size: 1.05rem;">Қазақстан</div>
-              <div id="exp-en" style="font-size: 0.72rem; color: var(--text-muted);">Kazakhstan</div>
+              <div id="exp-name" style="font-size: 1rem;">Қазақстан</div>
+              <div id="exp-en" style="font-size: 0.7rem; color: var(--text-muted);">Kazakhstan</div>
             </div>
           </div>
-          <button class="btn btn-icon" onclick="closeExploreCard()" style="padding: 2px 5px;">✕</button>
+          <button class="btn btn-icon" onclick="closeExploreCard()" style="padding: 1px 4px;">✕</button>
         </div>
         <div class="exp-row">
           <span class="exp-label">Астанасы:</span>
@@ -1350,7 +1281,7 @@
           <span class="exp-label">Халқы:</span>
           <span class="exp-val" id="exp-pop">~20 млн</span>
         </div>
-        <div style="margin-top: 10px;">
+        <div style="margin-top: 8px;">
           <button class="btn btn-primary" style="width: 100%; justify-content: center;" onclick="quizThisCountry()">
             🎯 Бұл елді табу
           </button>
@@ -1361,10 +1292,10 @@
     <!-- Unified Registration Modal -->
     <div class="modal-overlay" id="auth-modal" style="z-index: 200;">
       <div class="modal-card modal-card-auth">
-        <div style="text-align: center; margin-bottom: 16px;">
-          <div style="font-size: 2.2rem; margin-bottom: 4px;">🌍</div>
-          <h2 style="font-size: 1.25rem; font-weight: 800; color: #fff;">«ГеоКвест» жүйесіне кіру</h2>
-          <p style="font-size: 0.78rem; color: var(--text-muted);">Тест тапсыру үшін мәліметтеріңізді енгізіңіз</p>
+        <div style="text-align: center; margin-bottom: 14px;">
+          <div style="font-size: 2rem; margin-bottom: 3px;">🌍</div>
+          <h2 style="font-size: 1.2rem; font-weight: 800; color: #fff;">«ГеоКвест» жүйесіне кіру</h2>
+          <p style="font-size: 0.75rem; color: var(--text-muted);">Тест тапсыру үшін мәліметтеріңізді енгізіңіз</p>
         </div>
 
         <div class="admin-auto-banner" id="admin-detected-banner">
@@ -1413,7 +1344,7 @@
             <input type="password" id="auth-admin-password" placeholder="admin123" value="admin123">
           </div>
 
-          <button type="submit" class="btn btn-primary" id="btn-submit-auth" style="width: 100%; padding: 9px; justify-content: center; font-size: 0.9rem; margin-top: 4px;">
+          <button type="submit" class="btn btn-primary" id="btn-submit-auth" style="width: 100%; padding: 8px; justify-content: center; font-size: 0.88rem; margin-top: 4px;">
             🚀 Кіру және бастау
           </button>
         </form>
@@ -1429,15 +1360,15 @@
 
         <div class="submission-box" id="submission-card">
           <h3>✅ Нәтиже мұғалім журналына тіркелді!</h3>
-          <p style="font-size: 0.75rem; color: var(--text-muted);">
+          <p style="font-size: 0.72rem; color: var(--text-muted);">
             Оқушы: <strong id="res-student-name" style="color: #fff;">Арман (7-А)</strong> • 
             Күйі: <strong style="color: #10b981;">Сақталды</strong>
           </p>
-          <div style="margin-top: 5px; font-size: 0.72rem; color: #94a3b8;">
+          <div style="margin-top: 4px; font-size: 0.7rem; color: #94a3b8;">
             Мұғалімге жіберу коды:
           </div>
           <div class="code-pill" id="student-result-code">GEO-RESULT-CODE</div>
-          <button class="btn btn-primary" onclick="copyStudentCode()" style="font-size: 0.72rem; padding: 4px 8px;">
+          <button class="btn btn-primary" onclick="copyStudentCode()" style="font-size: 0.7rem; padding: 3px 6px;">
             📋 Кодты көшіру
           </button>
         </div>
@@ -1480,12 +1411,12 @@
             </div>
           </div>
 
-          <div style="font-size: 0.78rem; font-weight: 700; color: #fff; margin-bottom: 5px;">Құрлықтар бойынша:</div>
+          <div style="font-size: 0.75rem; font-weight: 700; color: #fff; margin-bottom: 4px;">Құрлықтар бойынша:</div>
           <div class="continents-breakdown" id="continents-breakdown"></div>
         </div>
 
         <div id="review-section">
-          <div style="font-size: 0.78rem; font-weight: 700; margin-bottom: 5px; text-align: left; color: var(--text-muted);">
+          <div style="font-size: 0.75rem; font-weight: 700; margin-bottom: 4px; text-align: left; color: var(--text-muted);">
             Қателерді талдау:
           </div>
           <div class="review-list" id="review-list"></div>
@@ -1513,15 +1444,15 @@
       <div class="modal-card modal-card-admin">
         <div class="admin-header-row">
           <div class="admin-title-wrap">
-            <span style="font-size: 1.8rem;">👑</span>
+            <span style="font-size: 1.6rem;">👑</span>
             <div>
               <h2>Мұғалім / Әкімші кабинеті</h2>
-              <p style="font-size: 0.75rem; color: #c084fc;">
+              <p style="font-size: 0.72rem; color: #c084fc;">
                 Әкімші: <strong>showanchik@gmail.com</strong>
               </p>
             </div>
           </div>
-          <button class="btn btn-icon" onclick="closeAdminPanel()" style="font-size: 1.1rem; padding: 2px 8px;">✕</button>
+          <button class="btn btn-icon" onclick="closeAdminPanel()" style="font-size: 1rem; padding: 2px 6px;">✕</button>
         </div>
 
         <div class="admin-kpi-row">
@@ -1557,7 +1488,7 @@
               <option value="type">Атауын жаз</option>
             </select>
 
-            <input type="text" id="admin-search-student" placeholder="Оқушыны іздеу..." oninput="renderAdminTable()" style="width: 150px;">
+            <input type="text" id="admin-search-student" placeholder="Оқушыны іздеу..." oninput="renderAdminTable()" style="width: 130px; font-size: 0.72rem; padding: 3px 5px;">
           </div>
 
           <div class="ctrl-group">
@@ -1572,7 +1503,7 @@
           <table class="admin-table">
             <thead>
               <tr>
-                <th style="width: 30px;">№</th>
+                <th style="width: 25px;">№</th>
                 <th>Күні</th>
                 <th>Оқушы</th>
                 <th>Email</th>
@@ -1591,7 +1522,7 @@
           </table>
         </div>
 
-        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem; color: var(--text-muted);">
+        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.7rem; color: var(--text-muted);">
           <span>💡 Нәтижелер ортақ журналға сақталады</span>
           <button class="btn btn-primary" onclick="closeAdminPanel()">Картаға оралу</button>
         </div>
@@ -1600,12 +1531,12 @@
 
     <!-- Import Modal -->
     <div class="modal-overlay" id="import-modal" style="z-index: 105;">
-      <div class="modal-card" style="max-width: 460px;">
+      <div class="modal-card" style="max-width: 440px;">
         <h2 class="modal-title">Оқушы кодын енгізу</h2>
         <p class="modal-subtitle">
           Оқушы жіберген тапсыру кодын енгізіңіз:
         </p>
-        <textarea id="import-code-input" rows="4" style="width: 100%; background: #090f20; border: 1px solid var(--border-color); color: #fff; padding: 8px; border-radius: 6px; font-family: monospace; font-size: 0.78rem; outline: none; margin-bottom: 12px; user-select: text;" placeholder="GEO-..."></textarea>
+        <textarea id="import-code-input" rows="4" style="width: 100%; background: #090f20; border: 1px solid var(--border-color); color: #fff; padding: 8px; border-radius: 6px; font-family: monospace; font-size: 0.75rem; outline: none; margin-bottom: 10px; user-select: text;" placeholder="GEO-..."></textarea>
         <div class="modal-actions">
           <button class="btn btn-primary" onclick="processImportCodes()">📥 Жүктеу</button>
           <button class="btn" onclick="closeImportModal()">Болдырмау</button>
@@ -1883,14 +1814,12 @@
       const badge = document.getElementById('user-badge');
       const icon = document.getElementById('user-role-icon');
       const nameEl = document.getElementById('user-display-name');
-      const subEl = document.getElementById('user-display-sub');
       const adminHeaderBtn = document.getElementById('btn-admin-header');
       const modalAdminBtn = document.getElementById('btn-view-admin-from-modal');
 
       if (!currentUser) {
         icon.textContent = '👤';
         nameEl.textContent = 'Қонақ';
-        subEl.textContent = 'Тіркелу';
         badge.classList.remove('admin-badge');
         adminHeaderBtn.style.display = 'none';
         if (modalAdminBtn) modalAdminBtn.style.display = 'none';
@@ -1899,15 +1828,13 @@
 
       if (currentUser.role === 'admin') {
         icon.textContent = '👑';
-        nameEl.textContent = currentUser.name || 'Әкімші';
-        subEl.textContent = ADMIN_EMAIL;
+        nameEl.textContent = 'Admin';
         badge.classList.add('admin-badge');
         adminHeaderBtn.style.display = 'inline-flex';
         if (modalAdminBtn) modalAdminBtn.style.display = 'inline-flex';
       } else {
         icon.textContent = '👨‍🎓';
         nameEl.textContent = currentUser.name;
-        subEl.textContent = `Сынып: ${currentUser.grade || '—'}`;
         badge.classList.remove('admin-badge');
         adminHeaderBtn.style.display = 'none';
         if (modalAdminBtn) modalAdminBtn.style.display = 'none';
@@ -1992,9 +1919,9 @@
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       document.getElementById('tab-' + mode).classList.add('active');
 
-      document.getElementById('banner-find').style.display = (mode === 'find') ? 'flex' : 'none';
-      document.getElementById('banner-type').style.display = (mode === 'type') ? 'flex' : 'none';
-      document.getElementById('banner-explore').style.display = (mode === 'explore') ? 'flex' : 'none';
+      document.getElementById('banner-find').style.display = (mode === 'find') ? 'block' : 'none';
+      document.getElementById('banner-type').style.display = (mode === 'type') ? 'block' : 'none';
+      document.getElementById('banner-explore').style.display = (mode === 'explore') ? 'block' : 'none';
       document.getElementById('game-actions').style.display = (mode === 'explore') ? 'none' : 'flex';
 
       tooltip.style.display = 'none';
@@ -2072,7 +1999,7 @@
         btn.textContent = '🎨 Түстер: Атлас';
       } else {
         mapContainer.classList.remove('neutral-palette');
-        btn.textContent = '🎨 Түстер: Аймақ';
+        btn.textContent = '🎨 Түстер';
       }
     }
 
@@ -2369,7 +2296,7 @@
     }
 
     /* ========================================================
-       ULTRA-FAST 60/120 FPS RENDERING & DECOUPLED RAF ENGINE
+       ULTRA-STABLE 60/120 FPS RENDERING LOOP
        ======================================================== */
     let isRenderPending = false;
     function scheduleRender() {
@@ -2435,20 +2362,18 @@
         newW = baseViewBox.w;
         newH = baseViewBox.h;
       }
-      if (newW < 55) {
-        newW = 55;
-        newH = (55 / 1000) * 540;
+      if (newW < 45) {
+        newW = 45;
+        newH = (45 / 1000) * 540;
       }
 
       const newX = centerX - (centerX - viewBox.x) * (newW / viewBox.w);
       const newY = centerY - (centerY - viewBox.y) * (newH / viewBox.h);
 
-      viewBox = {
-        x: Math.max(-80, Math.min(1080 - newW, newX)),
-        y: Math.max(-80, Math.min(620 - newH, newY)),
-        w: newW,
-        h: newH
-      };
+      viewBox.w = newW;
+      viewBox.h = newH;
+      viewBox.x = Math.max(-80, Math.min(1080 - newW, newX));
+      viewBox.y = Math.max(-80, Math.min(620 - newH, newY));
       scheduleRender();
     }
 
@@ -2476,7 +2401,7 @@
     }
 
     /* ========================================================
-       POINTER EVENTS & KINETIC INERTIA ENGINE (MOBILE & DESKTOP)
+       ROCK-SOLID PINCH-ZOOM (ZERO RECOIL, ZERO BOUNCE-BACK)
        ======================================================== */
     const mapContainer = document.getElementById('map-container');
     let containerWidth = 1000;
@@ -2495,11 +2420,16 @@
 
     let activePointers = new Map();
     let isPanning = false;
+    let isPinching = false;
+    let wasPinching = false; // FLAG TO PREVENT INERTIA AFTER PINCH!
     let startPoint = { x: 0, y: 0 };
-    let prevPinchDist = -1;
-    let prevPinchCenter = { x: 0, y: 0 };
 
-    // Kinetic glide velocity tracking
+    // Anchored Pinch Data
+    let pinchStartDist = 0;
+    let pinchStartViewBox = null;
+    let pinchAnchorSvg = null;
+
+    // Kinetic Velocity Tracking (1 finger pan ONLY)
     let velocityX = 0;
     let velocityY = 0;
     let lastMoveTime = 0;
@@ -2510,6 +2440,16 @@
         cancelAnimationFrame(inertiaRaf);
         inertiaRaf = null;
       }
+    }
+
+    function getPinchMetrics() {
+      const pts = Array.from(activePointers.values());
+      const p1 = pts[0];
+      const p2 = pts[1];
+      const dist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+      const midX = (p1.x + p2.x) / 2;
+      const midY = (p1.y + p2.y) / 2;
+      return { dist, midX, midY };
     }
 
     mapContainer.addEventListener('pointerdown', (e) => {
@@ -2528,8 +2468,21 @@
         lastMoveTime = performance.now();
         mapContainer.classList.add('is-dragging');
       } else if (activePointers.size === 2) {
+        // Two fingers down: enter pinch mode, lock state, anchor geometry
         isPanning = false;
-        prevPinchDist = -1;
+        isPinching = true;
+        wasPinching = true;
+        velocityX = 0;
+        velocityY = 0;
+
+        const metrics = getPinchMetrics();
+        pinchStartDist = metrics.dist;
+        pinchStartViewBox = { ...viewBox };
+
+        // Anchor in SVG coordinates at start of pinch
+        const svgX = pinchStartViewBox.x + ((metrics.midX - containerLeft) / containerWidth) * pinchStartViewBox.w;
+        const svgY = pinchStartViewBox.y + ((metrics.midY - containerTop) / containerHeight) * pinchStartViewBox.h;
+        pinchAnchorSvg = { x: svgX, y: svgY, midX: metrics.midX, midY: metrics.midY };
       }
     });
 
@@ -2540,13 +2493,13 @@
       const now = performance.now();
       const dt = Math.max(1, now - lastMoveTime);
 
-      if (activePointers.size === 1 && isPanning) {
-        // Single finger / mouse drag pan
+      if (activePointers.size === 1 && isPanning && !wasPinching) {
+        // Pure single-finger pan
         const dx = (e.clientX - startPoint.x) * (viewBox.w / containerWidth);
         const dy = (e.clientY - startPoint.y) * (viewBox.h / containerHeight);
         
-        viewBox.x = Math.max(-120, Math.min(1120 - viewBox.w, viewBox.x - dx));
-        viewBox.y = Math.max(-120, Math.min(660 - viewBox.h, viewBox.y - dy));
+        viewBox.x = Math.max(-100, Math.min(1100 - viewBox.w, viewBox.x - dx));
+        viewBox.y = Math.max(-100, Math.min(640 - viewBox.h, viewBox.y - dy));
 
         velocityX = (dx / dt) * 16;
         velocityY = (dy / dt) * 16;
@@ -2555,43 +2508,32 @@
         lastMoveTime = now;
         scheduleRender();
 
-      } else if (activePointers.size === 2) {
-        // Two fingers smooth pinch-to-zoom
-        const pts = Array.from(activePointers.values());
-        const p1 = pts[0];
-        const p2 = pts[1];
-        const curDist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
-        const midX = (p1.x + p2.x) / 2;
-        const midY = (p1.y + p2.y) / 2;
+      } else if (activePointers.size === 2 && isPinching && pinchStartViewBox) {
+        // Anchored stable pinch-to-zoom (STAYS EXACTLY WHERE PLACED!)
+        const metrics = getPinchMetrics();
+        if (pinchStartDist > 10 && metrics.dist > 10) {
+          const scale = pinchStartDist / metrics.dist;
+          
+          let newW = pinchStartViewBox.w * scale;
+          let newH = pinchStartViewBox.h * scale;
 
-        if (prevPinchDist > 0 && curDist > 10) {
-          const factor = prevPinchDist / curDist;
-          const clamped = Math.max(0.86, Math.min(1.14, factor));
-          const svgX = viewBox.x + ((midX - containerLeft) / containerWidth) * viewBox.w;
-          const svgY = viewBox.y + ((midY - containerTop) / containerHeight) * viewBox.h;
-
-          let newW = viewBox.w * clamped;
-          let newH = viewBox.h * clamped;
           if (newW > baseViewBox.w) { newW = baseViewBox.w; newH = baseViewBox.h; }
-          if (newW < 55) { newW = 55; newH = (55 / 1000) * 540; }
+          if (newW < 45) { newW = 45; newH = (45 / 1000) * 540; }
 
-          const newX = svgX - (svgX - viewBox.x) * (newW / viewBox.w);
-          const newY = svgY - (svgY - viewBox.y) * (newH / viewBox.h);
+          const anchorRatioX = (pinchAnchorSvg.midX - containerLeft) / containerWidth;
+          const anchorRatioY = (pinchAnchorSvg.midY - containerTop) / containerHeight;
+
+          // Pan shift based on midpoint shift during pinch
+          const shiftX = ((metrics.midX - pinchAnchorSvg.midX) / containerWidth) * newW;
+          const shiftY = ((metrics.midY - pinchAnchorSvg.midY) / containerHeight) * newH;
+
           viewBox.w = newW;
           viewBox.h = newH;
-          viewBox.x = Math.max(-100, Math.min(1100 - newW, newX));
-          viewBox.y = Math.max(-100, Math.min(640 - newH, newY));
-
-          // Pan slightly with pinch center
-          const panDx = (midX - prevPinchCenter.x) * (viewBox.w / containerWidth);
-          const panDy = (midY - prevPinchCenter.y) * (viewBox.h / containerHeight);
-          viewBox.x = Math.max(-120, Math.min(1120 - viewBox.w, viewBox.x - panDx));
-          viewBox.y = Math.max(-120, Math.min(660 - viewBox.h, viewBox.y - panDy));
+          viewBox.x = Math.max(-80, Math.min(1080 - newW, pinchAnchorSvg.x - anchorRatioX * newW - shiftX));
+          viewBox.y = Math.max(-80, Math.min(620 - newH, pinchAnchorSvg.y - anchorRatioY * newH - shiftY));
 
           scheduleRender();
         }
-        prevPinchDist = curDist;
-        prevPinchCenter = { x: midX, y: midY };
       }
     });
 
@@ -2599,34 +2541,39 @@
       activePointers.delete(e.pointerId);
       try { mapContainer.releasePointerCapture(e.pointerId); } catch(err) {}
 
-      if (activePointers.size < 2) {
-        prevPinchDist = -1;
-      }
-
       if (activePointers.size === 1) {
+        // ONE FINGER REMAINS AFTER PINCH: DO NOT PAN, DO NOT GLIDE!
+        // Lock startPoint to remaining finger so no jump happens
         const rem = Array.from(activePointers.values())[0];
         startPoint = { x: rem.x, y: rem.y };
-        isPanning = true;
-      } else if (activePointers.size === 0) {
         isPanning = false;
+      } else if (activePointers.size === 0) {
+        // All fingers lifted
         mapContainer.classList.remove('is-dragging');
+        isPanning = false;
+        isPinching = false;
 
-        // Trigger smooth kinetic glide if moving with speed
-        if (Math.hypot(velocityX, velocityY) > 0.8) {
+        // ONLY TRIGGER GLIDE IF NOT PINCHING!
+        if (!wasPinching && Math.hypot(velocityX, velocityY) > 0.8) {
           startKineticGlide();
         }
+
+        wasPinching = false;
+        velocityX = 0;
+        velocityY = 0;
+        pinchStartViewBox = null;
       }
     }
 
     function startKineticGlide() {
-      const friction = 0.92;
+      const friction = 0.90;
       function glideStep() {
-        if (Math.hypot(velocityX, velocityY) < 0.1 || isPanning) {
+        if (Math.hypot(velocityX, velocityY) < 0.1 || isPanning || isPinching) {
           stopInertia();
           return;
         }
-        viewBox.x = Math.max(-100, Math.min(1100 - viewBox.w, viewBox.x - velocityX));
-        viewBox.y = Math.max(-100, Math.min(640 - viewBox.h, viewBox.y - velocityY));
+        viewBox.x = Math.max(-80, Math.min(1080 - viewBox.w, viewBox.x - velocityX));
+        viewBox.y = Math.max(-80, Math.min(620 - viewBox.h, viewBox.y - velocityY));
         velocityX *= friction;
         velocityY *= friction;
         updateSvgViewBox();
@@ -2638,12 +2585,17 @@
     mapContainer.addEventListener('pointerup', onPointerEnd);
     mapContainer.addEventListener('pointercancel', onPointerEnd);
 
-    // Double tap to zoom on phones
+    // Prevent iOS Safari default viewport pinch/zoom
+    document.addEventListener('gesturestart', (e) => e.preventDefault(), { passive: false });
+    document.addEventListener('gesturechange', (e) => e.preventDefault(), { passive: false });
+    document.addEventListener('gestureend', (e) => e.preventDefault(), { passive: false });
+
+    // Double tap to zoom
     let lastTapTime = 0;
     mapContainer.addEventListener('touchend', (e) => {
       const currentTime = new Date().getTime();
       const tapLength = currentTime - lastTapTime;
-      if (tapLength < 320 && tapLength > 0 && e.changedTouches && e.changedTouches.length === 1) {
+      if (tapLength < 320 && tapLength > 0 && e.changedTouches && e.changedTouches.length === 1 && !wasPinching) {
         const touch = e.changedTouches[0];
         const svgX = viewBox.x + ((touch.clientX - containerLeft) / containerWidth) * viewBox.w;
         const svgY = viewBox.y + ((touch.clientY - containerTop) / containerHeight) * viewBox.h;
