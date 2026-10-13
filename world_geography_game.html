@@ -76,7 +76,7 @@
     }
 
     .brand-icon {
-      font-size: 1.5rem;
+      font-size: 1.4rem;
     }
 
     .brand h1 {
@@ -315,11 +315,6 @@
       text-shadow: 0 0 8px rgba(56, 189, 248, 0.4);
     }
 
-    .task-subtitle {
-      font-size: 0.72rem;
-      color: var(--text-muted);
-    }
-
     .typing-box {
       display: flex;
       align-items: center;
@@ -365,7 +360,7 @@
       animation: fadeIn 0.2s ease;
     }
 
-    /* Map Workspace */
+    /* Map Workspace: GPU Composited, Zero Forced Reflows, Hardware Accelerated */
     .map-wrapper {
       flex: 1;
       position: relative;
@@ -375,12 +370,19 @@
       align-items: center;
       justify-content: center;
       cursor: grab;
-      touch-action: none; /* CRITICAL FOR MOBILE TOUCH DRAGGING */
+      touch-action: none;
       -webkit-touch-callout: none;
+      transform: translateZ(0); /* Promotes layer to mobile GPU */
+      will-change: transform;
     }
 
-    .map-wrapper:active {
+    .map-wrapper.is-dragging {
       cursor: grabbing;
+    }
+
+    /* During active gestures, disable country pointer events to eliminate hover recalculation */
+    .map-wrapper.is-dragging .country {
+      pointer-events: none;
     }
 
     svg#world-map {
@@ -390,20 +392,19 @@
       touch-action: none;
     }
 
-    /* SVG Country Styles */
+    /* Country Styles: 100% vector stroke, ZERO expensive SVG drop-shadow filters */
     .country {
       stroke: #192440;
       stroke-width: 0.75;
       stroke-linejoin: round;
       stroke-linecap: round;
-      transition: fill 0.15s ease, stroke 0.15s ease, filter 0.15s ease;
+      transition: fill 0.12s ease, stroke 0.12s ease;
       cursor: pointer;
     }
 
     .country:hover {
-      filter: brightness(1.3) drop-shadow(0 0 5px rgba(255, 255, 255, 0.25));
       stroke: #ffffff;
-      stroke-width: 1.2;
+      stroke-width: 1.5;
     }
 
     .country.c-europe { fill: #2563eb; }
@@ -423,9 +424,8 @@
     .country.target-highlight {
       fill: #facc15 !important;
       stroke: #ffffff !important;
-      stroke-width: 2 !important;
-      animation: targetPulse 1.4s infinite alternate;
-      filter: drop-shadow(0 0 10px #facc15);
+      stroke-width: 2.2 !important;
+      animation: targetPulse 1.2s infinite alternate;
     }
 
     @keyframes targetPulse {
@@ -435,8 +435,8 @@
 
     .country.correct-hit {
       fill: #10b981 !important;
-      stroke: #6ee7b7 !important;
-      stroke-width: 1.8 !important;
+      stroke: #ffffff !important;
+      stroke-width: 2.2 !important;
       animation: hitSuccess 0.4s ease;
     }
 
@@ -448,8 +448,8 @@
 
     .country.wrong-hit {
       fill: #ef4444 !important;
-      stroke: #fca5a5 !important;
-      stroke-width: 1.8 !important;
+      stroke: #ffffff !important;
+      stroke-width: 2.2 !important;
       animation: shake 0.3s ease;
     }
 
@@ -461,8 +461,8 @@
 
     .country.revealed {
       fill: #f97316 !important;
-      stroke: #fff !important;
-      stroke-width: 1.6 !important;
+      stroke: #ffffff !important;
+      stroke-width: 1.8 !important;
     }
 
     /* Map Controls (Floating) */
@@ -1080,9 +1080,6 @@
       }
       .target-country-name {
         font-size: 0.95rem;
-      }
-      .task-subtitle {
-        display: none !important;
       }
       .typing-box {
         max-width: 100%;
@@ -1970,11 +1967,8 @@
     }
 
     function updateTooltipPos(e) {
-      const containerRect = document.getElementById('map-container').getBoundingClientRect();
-      const x = e.clientX - containerRect.left;
-      const y = e.clientY - containerRect.top;
-      tooltip.style.left = `${x}px`;
-      tooltip.style.top = `${y}px`;
+      tooltip.style.left = `${e.clientX - containerLeft}px`;
+      tooltip.style.top = `${e.clientY - containerTop}px`;
     }
 
     function onCountryLeave() {
@@ -2030,6 +2024,7 @@
 
     function restartRound() {
       stopTimer();
+      stopInertia();
       secondsElapsed = 0;
       updateTimerDisplay();
 
@@ -2163,7 +2158,7 @@
         setTimeout(() => {
           questionIndex++;
           loadNextQuestion();
-        }, 700);
+        }, 650);
 
       } else {
         playSound('wrong');
@@ -2173,7 +2168,7 @@
 
         if (clickedPath) {
           clickedPath.classList.add('wrong-hit');
-          setTimeout(() => clickedPath.classList.remove('wrong-hit'), 600);
+          setTimeout(() => clickedPath.classList.remove('wrong-hit'), 500);
         }
 
         showHint(`Неверно. Вы нажали на: ${country.flag} ${country['name_ru']}`, true);
@@ -2233,7 +2228,7 @@
         setTimeout(() => {
           questionIndex++;
           loadNextQuestion();
-        }, 900);
+        }, 800);
 
       } else {
         playSound('wrong');
@@ -2318,7 +2313,7 @@
       setTimeout(() => {
         questionIndex++;
         loadNextQuestion();
-      }, 2000);
+      }, 1800);
     }
 
     function skipQuestion() {
@@ -2373,23 +2368,43 @@
       document.getElementById('timer-display').textContent = `${mins}:${secs}`;
     }
 
+    /* ========================================================
+       ULTRA-FAST 60/120 FPS RENDERING & DECOUPLED RAF ENGINE
+       ======================================================== */
+    let isRenderPending = false;
+    function scheduleRender() {
+      if (!isRenderPending) {
+        isRenderPending = true;
+        requestAnimationFrame(renderMapFrame);
+      }
+    }
+
+    function renderMapFrame() {
+      isRenderPending = false;
+      updateSvgViewBox();
+    }
+
     function updateSvgViewBox() {
-      svg.setAttribute('viewBox', `${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`);
+      svg.setAttribute('viewBox', `${viewBox.x.toFixed(1)} ${viewBox.y.toFixed(1)} ${viewBox.w.toFixed(1)} ${viewBox.h.toFixed(1)}`);
     }
 
     function zoomIn() {
+      stopInertia();
       applyZoom(0.72, viewBox.x + viewBox.w / 2, viewBox.y + viewBox.h / 2);
     }
 
     function zoomOut() {
+      stopInertia();
       applyZoom(1.38, viewBox.x + viewBox.w / 2, viewBox.y + viewBox.h / 2);
     }
 
     function resetZoom() {
+      stopInertia();
       animateViewBox(baseViewBox);
     }
 
     function zoomToTarget() {
+      stopInertia();
       if (currentTarget) {
         zoomToCountry(currentTarget);
       } else {
@@ -2420,26 +2435,26 @@
         newW = baseViewBox.w;
         newH = baseViewBox.h;
       }
-      if (newW < 60) {
-        newW = 60;
-        newH = (60 / 1000) * 540;
+      if (newW < 55) {
+        newW = 55;
+        newH = (55 / 1000) * 540;
       }
 
       const newX = centerX - (centerX - viewBox.x) * (newW / viewBox.w);
       const newY = centerY - (centerY - viewBox.y) * (newH / viewBox.h);
 
       viewBox = {
-        x: Math.max(-50, Math.min(1050 - newW, newX)),
-        y: Math.max(-50, Math.min(590 - newH, newY)),
+        x: Math.max(-80, Math.min(1080 - newW, newX)),
+        y: Math.max(-80, Math.min(620 - newH, newY)),
         w: newW,
         h: newH
       };
-      updateSvgViewBox();
+      scheduleRender();
     }
 
     function animateViewBox(target) {
       const start = { ...viewBox };
-      const duration = 300;
+      const duration = 280;
       const startTime = performance.now();
 
       function step(currentTime) {
@@ -2461,24 +2476,57 @@
     }
 
     /* ========================================================
-       POINTER EVENTS & PINCH-ZOOM ENGINE (MOBILE & DESKTOP)
+       POINTER EVENTS & KINETIC INERTIA ENGINE (MOBILE & DESKTOP)
        ======================================================== */
     const mapContainer = document.getElementById('map-container');
+    let containerWidth = 1000;
+    let containerHeight = 540;
+    let containerLeft = 0;
+    let containerTop = 0;
+
+    function updateContainerMetrics() {
+      const rect = mapContainer.getBoundingClientRect();
+      containerWidth = rect.width || 1000;
+      containerHeight = rect.height || 540;
+      containerLeft = rect.left;
+      containerTop = rect.top;
+    }
+    window.addEventListener('resize', updateContainerMetrics);
+
     let activePointers = new Map();
-    let prevPinchDist = -1;
-    let prevPinchCenter = { x: 0, y: 0 };
     let isPanning = false;
     let startPoint = { x: 0, y: 0 };
+    let prevPinchDist = -1;
+    let prevPinchCenter = { x: 0, y: 0 };
+
+    // Kinetic glide velocity tracking
+    let velocityX = 0;
+    let velocityY = 0;
+    let lastMoveTime = 0;
+    let inertiaRaf = null;
+
+    function stopInertia() {
+      if (inertiaRaf) {
+        cancelAnimationFrame(inertiaRaf);
+        inertiaRaf = null;
+      }
+    }
 
     mapContainer.addEventListener('pointerdown', (e) => {
       if (e.target.closest('.map-floating-controls') || e.target.closest('.explore-panel') || e.target.closest('.modal-card')) return;
       
-      activePointers.set(e.pointerId, { clientX: e.clientX, clientY: e.clientY });
+      stopInertia();
+      updateContainerMetrics();
+      activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
       try { mapContainer.setPointerCapture(e.pointerId); } catch(err) {}
 
       if (activePointers.size === 1) {
         isPanning = true;
         startPoint = { x: e.clientX, y: e.clientY };
+        velocityX = 0;
+        velocityY = 0;
+        lastMoveTime = performance.now();
+        mapContainer.classList.add('is-dragging');
       } else if (activePointers.size === 2) {
         isPanning = false;
         prevPinchDist = -1;
@@ -2487,38 +2535,60 @@
 
     mapContainer.addEventListener('pointermove', (e) => {
       if (!activePointers.has(e.pointerId)) return;
-      activePointers.set(e.pointerId, { clientX: e.clientX, clientY: e.clientY });
+      activePointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+      const now = performance.now();
+      const dt = Math.max(1, now - lastMoveTime);
 
       if (activePointers.size === 1 && isPanning) {
-        // Single touch / mouse drag
-        const dx = (e.clientX - startPoint.x) * (viewBox.w / mapContainer.clientWidth);
-        const dy = (e.clientY - startPoint.y) * (viewBox.h / mapContainer.clientHeight);
-        viewBox.x = Math.max(-100, Math.min(1100 - viewBox.w, viewBox.x - dx));
-        viewBox.y = Math.max(-100, Math.min(640 - viewBox.h, viewBox.y - dy));
-        updateSvgViewBox();
+        // Single finger / mouse drag pan
+        const dx = (e.clientX - startPoint.x) * (viewBox.w / containerWidth);
+        const dy = (e.clientY - startPoint.y) * (viewBox.h / containerHeight);
+        
+        viewBox.x = Math.max(-120, Math.min(1120 - viewBox.w, viewBox.x - dx));
+        viewBox.y = Math.max(-120, Math.min(660 - viewBox.h, viewBox.y - dy));
+
+        velocityX = (dx / dt) * 16;
+        velocityY = (dy / dt) * 16;
+
         startPoint = { x: e.clientX, y: e.clientY };
+        lastMoveTime = now;
+        scheduleRender();
+
       } else if (activePointers.size === 2) {
-        // Two fingers pinch-to-zoom
+        // Two fingers smooth pinch-to-zoom
         const pts = Array.from(activePointers.values());
         const p1 = pts[0];
         const p2 = pts[1];
-        const curDist = Math.hypot(p1.clientX - p2.clientX, p1.clientY - p2.clientY);
-        const midX = (p1.clientX + p2.clientX) / 2;
-        const midY = (p1.clientY + p2.clientY) / 2;
+        const curDist = Math.hypot(p1.x - p2.x, p1.y - p2.y);
+        const midX = (p1.x + p2.x) / 2;
+        const midY = (p1.y + p2.y) / 2;
 
         if (prevPinchDist > 0 && curDist > 10) {
-          const zoomFactor = prevPinchDist / curDist;
-          const clampedFactor = Math.max(0.85, Math.min(1.15, zoomFactor));
-          const rect = mapContainer.getBoundingClientRect();
-          const svgX = viewBox.x + ((midX - rect.left) / rect.width) * viewBox.w;
-          const svgY = viewBox.y + ((midY - rect.top) / rect.height) * viewBox.h;
-          applyZoom(clampedFactor, svgX, svgY);
+          const factor = prevPinchDist / curDist;
+          const clamped = Math.max(0.86, Math.min(1.14, factor));
+          const svgX = viewBox.x + ((midX - containerLeft) / containerWidth) * viewBox.w;
+          const svgY = viewBox.y + ((midY - containerTop) / containerHeight) * viewBox.h;
 
-          const panDx = (midX - prevPinchCenter.x) * (viewBox.w / mapContainer.clientWidth);
-          const panDy = (midY - prevPinchCenter.y) * (viewBox.h / mapContainer.clientHeight);
-          viewBox.x = Math.max(-100, Math.min(1100 - viewBox.w, viewBox.x - panDx));
-          viewBox.y = Math.max(-100, Math.min(640 - viewBox.h, viewBox.y - panDy));
-          updateSvgViewBox();
+          let newW = viewBox.w * clamped;
+          let newH = viewBox.h * clamped;
+          if (newW > baseViewBox.w) { newW = baseViewBox.w; newH = baseViewBox.h; }
+          if (newW < 55) { newW = 55; newH = (55 / 1000) * 540; }
+
+          const newX = svgX - (svgX - viewBox.x) * (newW / viewBox.w);
+          const newY = svgY - (svgY - viewBox.y) * (newH / viewBox.h);
+          viewBox.w = newW;
+          viewBox.h = newH;
+          viewBox.x = Math.max(-100, Math.min(1100 - newW, newX));
+          viewBox.y = Math.max(-100, Math.min(640 - newH, newY));
+
+          // Pan slightly with pinch center
+          const panDx = (midX - prevPinchCenter.x) * (viewBox.w / containerWidth);
+          const panDy = (midY - prevPinchCenter.y) * (viewBox.h / containerHeight);
+          viewBox.x = Math.max(-120, Math.min(1120 - viewBox.w, viewBox.x - panDx));
+          viewBox.y = Math.max(-120, Math.min(660 - viewBox.h, viewBox.y - panDy));
+
+          scheduleRender();
         }
         prevPinchDist = curDist;
         prevPinchCenter = { x: midX, y: midY };
@@ -2532,13 +2602,37 @@
       if (activePointers.size < 2) {
         prevPinchDist = -1;
       }
+
       if (activePointers.size === 1) {
-        const remaining = Array.from(activePointers.values())[0];
-        startPoint = { x: remaining.clientX, y: remaining.clientY };
+        const rem = Array.from(activePointers.values())[0];
+        startPoint = { x: rem.x, y: rem.y };
         isPanning = true;
       } else if (activePointers.size === 0) {
         isPanning = false;
+        mapContainer.classList.remove('is-dragging');
+
+        // Trigger smooth kinetic glide if moving with speed
+        if (Math.hypot(velocityX, velocityY) > 0.8) {
+          startKineticGlide();
+        }
       }
+    }
+
+    function startKineticGlide() {
+      const friction = 0.92;
+      function glideStep() {
+        if (Math.hypot(velocityX, velocityY) < 0.1 || isPanning) {
+          stopInertia();
+          return;
+        }
+        viewBox.x = Math.max(-100, Math.min(1100 - viewBox.w, viewBox.x - velocityX));
+        viewBox.y = Math.max(-100, Math.min(640 - viewBox.h, viewBox.y - velocityY));
+        velocityX *= friction;
+        velocityY *= friction;
+        updateSvgViewBox();
+        inertiaRaf = requestAnimationFrame(glideStep);
+      }
+      glideStep();
     }
 
     mapContainer.addEventListener('pointerup', onPointerEnd);
@@ -2551,9 +2645,8 @@
       const tapLength = currentTime - lastTapTime;
       if (tapLength < 320 && tapLength > 0 && e.changedTouches && e.changedTouches.length === 1) {
         const touch = e.changedTouches[0];
-        const rect = mapContainer.getBoundingClientRect();
-        const svgX = viewBox.x + ((touch.clientX - rect.left) / rect.width) * viewBox.w;
-        const svgY = viewBox.y + ((touch.clientY - rect.top) / rect.height) * viewBox.h;
+        const svgX = viewBox.x + ((touch.clientX - containerLeft) / containerWidth) * viewBox.w;
+        const svgY = viewBox.y + ((touch.clientY - containerTop) / containerHeight) * viewBox.h;
         applyZoom(0.65, svgX, svgY);
       }
       lastTapTime = currentTime;
@@ -2561,11 +2654,10 @@
 
     mapContainer.addEventListener('wheel', (e) => {
       e.preventDefault();
-      const rect = mapContainer.getBoundingClientRect();
-      const mouseX = viewBox.x + (e.clientX - rect.left) * (viewBox.w / rect.width);
-      const mouseY = viewBox.y + (e.clientY - rect.top) * (viewBox.h / rect.height);
-      const factor = e.deltaY < 0 ? 0.85 : 1.15;
-      applyZoom(factor, mouseX, mouseY);
+      const svgX = viewBox.x + ((e.clientX - containerLeft) / containerWidth) * viewBox.w;
+      const svgY = viewBox.y + ((e.clientY - containerTop) / containerHeight) * viewBox.h;
+      const factor = e.deltaY < 0 ? 0.82 : 1.18;
+      applyZoom(factor, svgX, svgY);
     }, { passive: false });
 
     function showExploreCard(country) {
@@ -2623,6 +2715,7 @@
 
     function finishRound() {
       stopTimer();
+      stopInertia();
       playSound('fanfare');
       fireConfetti();
 
@@ -3113,6 +3206,7 @@
 
     window.addEventListener('DOMContentLoaded', () => {
       renderMap();
+      updateContainerMetrics();
       updateAdminBadge();
       const hasSession = initUserSession();
       if (hasSession) {
@@ -3121,6 +3215,7 @@
     });
 
     window.addEventListener('resize', () => {
+      updateContainerMetrics();
       const canvas = document.getElementById('confetti-canvas');
       if (canvas) {
         canvas.width = window.innerWidth;
